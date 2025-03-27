@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <h3>Stopwatch</h3>
-      <h4>Time : {time}</h4>
+      <h4>Time: {time}</h4>
       <button onClick={handleStartandStop}>
         {isRunning ? <p>Stop</p> : <p>Start</p>}
       </button>
