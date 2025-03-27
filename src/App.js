@@ -1,23 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
+  const [time, setTime] = useState("0:00");
+  const [elapsedTime, setElapsedtime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (isRunning) {
+      timer = setInterval(() => {
+        setElapsedtime((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+
+    return () => clearInterval(timer);
+  }, [isRunning]);
+
+
+  useEffect(()=>{
+    const minutes = Math.floor(elapsedTime/60);
+    const seconds = elapsedTime%60;
+    const formattedTime = `${minutes}:${seconds.toString().padStart(2,"0")}`;
+    setTime(formattedTime);
+  },[elapsedTime])
+
+
+
+
+
+  const handleStartandStop = () => {
+    setIsRunning(!isRunning);
+
+    //should call the time after every one second
+    //how do I convert string into a time format
+  };
+
+
+  const handleReset =()=>{
+    setElapsedtime(0);
+    setTime("0:00");
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Stopwatch</h3>
+      <h4>Time : {time}</h4>
+      <button onClick={handleStartandStop}>
+        {isRunning ? <p>Stop</p> : <p>Start</p>}
+      </button>
+      <button>
+        <p onClick={handleReset}>Reset</p>
+      </button>
     </div>
   );
 }
